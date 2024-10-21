@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,10 +31,20 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        if (event.getEndDate().isBefore(event.getStartDate())) {
+    public ResponseEntity<Event> createEvent(@RequestPart Event event, @RequestPart(required = false) MultipartFile file) {
+        if (event.getEndDate().before(event.getStartDate())) {
             return ResponseEntity.badRequest().build();
         }
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                String imageUrl = eventService.uploadImageToFiveManage(file);
+                event.setImageUrl(imageUrl);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
         return new ResponseEntity<>(eventService.save(event), HttpStatus.CREATED);
     }
 
