@@ -49,10 +49,20 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
+    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event, @RequestParam("file") MultipartFile file) {
         if (eventService.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
+        if (!file.isEmpty()) {
+            try {
+                String imageUrl = eventService.uploadImageToFiveManage(file);
+                event.setImageUrl(imageUrl);
+            } catch (IOException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+
         return ResponseEntity.ok(eventService.save(event));
     }
 
@@ -60,7 +70,7 @@ public class EventController {
     public ResponseEntity<Object> deleteEvent(@PathVariable Long id) {
         return eventService.findById(id)
                 .map(event -> {
-                    event.setActive(false);
+                    event.setIsActive(false);
                     eventService.save(event);
                     return ResponseEntity.noContent().build();
                 })
