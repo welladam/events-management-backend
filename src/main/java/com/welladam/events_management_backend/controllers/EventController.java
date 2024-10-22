@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/events")
@@ -49,22 +50,38 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event, @RequestParam("file") MultipartFile file) {
-        if (eventService.findById(id).isEmpty()) {
+    public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestPart Event event, @RequestPart(required = false) MultipartFile file) {
+        if (event.getEndDate().before(event.getStartDate())) {
+            return ResponseEntity.badRequest().body("End date cannot be before start date.");
+        }
+
+        Optional<Event> existingEventOpt = eventService.findById(id);
+
+        if (existingEventOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        if (!file.isEmpty()) {
+        Event existingEvent = existingEventOpt.get();
+        existingEvent.setTitle(event.getTitle());
+        existingEvent.setDescription(event.getDescription());
+        existingEvent.setStartDate(event.getStartDate());
+        existingEvent.setEndDate(event.getEndDate());
+        existingEvent.setPrice(event.getPrice());
+        existingEvent.setStatus(event.getStatus());
+
+        if (file != null && !file.isEmpty()) {
             try {
                 String imageUrl = eventService.uploadImageToFiveManage(file);
-                event.setImageUrl(imageUrl);
+                existingEvent.setImageUrl(imageUrl);
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
         }
 
-        return ResponseEntity.ok(eventService.save(event));
+        Event updatedEvent = eventService.save(existingEvent);
+        return ResponseEntity.ok(updatedEvent);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteEvent(@PathVariable Long id) {
