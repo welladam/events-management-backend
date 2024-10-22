@@ -30,11 +30,11 @@ public class EventService {
     private EventRepository eventRepository;
 
     public List<Event> findActiveEvents() {
-        return eventRepository.findByIsActiveTrue();
+        return eventRepository.findByIsActiveTrueOrderByStartDateDesc();
     }
 
     public Optional<Event> findById(Long id) {
-        return eventRepository.findById(id);
+        return eventRepository.findByIdAndIsActiveTrue(id);
     }
 
     public Event save(Event event) {
