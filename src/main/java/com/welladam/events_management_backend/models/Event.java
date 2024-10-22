@@ -35,7 +35,7 @@ public class Event {
     private Status status;
 
     public enum Status {
-        STARTED, COMPLETED, PAUSED
+        started, completed, paused
     }
 
     private Boolean isActive = true;
