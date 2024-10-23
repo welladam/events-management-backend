@@ -7,8 +7,9 @@ This is the backend application for managing events, built with Java, Spring Boo
 - [Installation](#installation)
 - [Running the Project](#running-the-project)
 - [Environment Variables](#environment-variables)
+- [PostgreSQL Configuration](#postgreSQL-configuration)
+- [Fivemanage API Integration](#fivemanage-api-integration)
 - [Project Structure](#project-structure)
-- [Contribution](#contribution)
 - [Pending Improvements](#pending-improvements)
 
 ## Technologies Used
