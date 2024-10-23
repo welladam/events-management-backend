@@ -53,3 +53,4 @@ application.yml
 
 # Ignore IntelliJ workspace
 *.iws
+src/main/resources/application.properties
