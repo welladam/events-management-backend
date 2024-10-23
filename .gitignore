@@ -31,7 +31,6 @@ hs_err_pid*
 *.ear
 
 # Ignore Spring Boot sensitive configuration files
-application.properties
 application.yml
 
 # Ignore environment files
@@ -53,4 +52,3 @@ application.yml
 
 # Ignore IntelliJ workspace
 *.iws
-src/main/resources/application.properties
