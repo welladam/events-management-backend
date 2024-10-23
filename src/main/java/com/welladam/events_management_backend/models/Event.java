@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-
-import java.util.Date;
+import java.time.OffsetDateTime;
 
 @Data
 @Entity
@@ -22,9 +21,9 @@ public class Event {
     private String description;
 
     @NotBlank(message = "Start Date is mandatory")
-    private Date startDate;
+    private OffsetDateTime startDate;
     @NotBlank(message = "End Date is mandatory")
-    private Date endDate;
+    private OffsetDateTime endDate;
 
     @Column(nullable = true)
     private Double price;
@@ -32,6 +31,7 @@ public class Event {
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
     private Status status;
 
     public enum Status {

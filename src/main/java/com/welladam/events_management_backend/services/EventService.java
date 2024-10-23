@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,14 @@ public class EventService {
 
     public List<Event> findActiveEvents() {
         return eventRepository.findByIsActiveTrueOrderByStartDateDesc();
+    }
+
+    public List<Event> findUpcomingEvents() {
+        return eventRepository.findUpcomingActiveEvents(LocalDate.now());
+    }
+
+    public List<Event> findPastEvents() {
+        return eventRepository.findPastActiveEvents(LocalDate.now());
     }
 
     public Optional<Event> findById(Long id) {

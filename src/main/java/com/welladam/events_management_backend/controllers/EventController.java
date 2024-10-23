@@ -24,6 +24,16 @@ public class EventController {
         return eventService.findActiveEvents();
     }
 
+    @GetMapping("/upcoming")
+    public List<Event> getAllUpcomingEvents() {
+        return eventService.findUpcomingEvents();
+    }
+
+    @GetMapping("/past")
+    public List<Event> getAllPastEvents() {
+        return eventService.findPastEvents();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
         return eventService.findById(id)
@@ -33,7 +43,7 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestPart Event event, @RequestPart(required = false) MultipartFile file) {
-        if (event.getEndDate().before(event.getStartDate())) {
+        if (event.getEndDate().isBefore(event.getStartDate())) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -51,7 +61,7 @@ public class EventController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateEvent(@PathVariable Long id, @RequestPart Event event, @RequestPart(required = false) MultipartFile file) {
-        if (event.getEndDate().before(event.getStartDate())) {
+        if (event.getEndDate().isBefore(event.getStartDate())) {
             return ResponseEntity.badRequest().body("End date cannot be before start date.");
         }
 
