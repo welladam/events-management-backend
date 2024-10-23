@@ -82,7 +82,7 @@ To set up **PostgreSQL** for this project:
 3. **Configure Database User**: Ensure you have a user with the necessary permissions. If needed, create a new user and grant permissions:
    ```
    CREATE USER your_db_username WITH PASSWORD 'your_db_password';
-   GRANT ALL PRIVILEGES ON DATABASE events_db TO your_db_username;
+   GRANT ALL PRIVILEGES ON DATABASE events TO your_db_username;
    ```
 4. **Update Environment Variables**: Set the following variables in the `application.properties` file:
    ```
